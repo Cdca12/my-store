@@ -27,6 +27,20 @@ router.get('/', (req, res) => {
   res.json(products.slice(0, limit));
 });
 
+router.post('/', (req, res) => {
+  const body = req.body;
+  let lastProduct = products[products.length - 1];
+  products.push({
+    id: lastProduct.id + 1,
+    ...body
+  });
+
+  res.json({
+    message: 'Created',
+    data: products[products.length - 1]
+  });
+});
+
 // Todo lo que es específico debe ir antes de lo dinámico
 router.get('/filter', (req, res) => {
   res.send('Yo soy un filter');
