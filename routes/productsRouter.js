@@ -24,7 +24,7 @@ generateProducts();
 router.get('/', (req, res) => {
   const { size } = req.query;
   const limit = size || 10;
-  res.json(products.slice(0, limit));
+  res.status(200).json(products.slice(0, limit));
 });
 
 // Todo lo que es específico debe ir antes de lo dinámico
@@ -35,7 +35,12 @@ router.get('/filter', (req, res) => {
 router.get('/:id', (req, res) => {
   const { id } = req.params;
   let product = products.find(product => product.id == id);
-  res.json(product);
+  if (!product) {
+    res.status(404).json({
+      message: 'Not found'
+    });
+  }
+  res.status(200).json(product);
 });
 
 router.post('/', (req, res) => {
@@ -48,10 +53,10 @@ router.post('/', (req, res) => {
   });
   let productCreated = products.find(product => product.id == newId);
 
-  res.json({
-    message: 'Created',
-    data: productCreated
-  });
+  res.status(201).json({
+      message: 'Created',
+      data: productCreated
+    });
 });
 
 router.put('/:id', (req, res) => {
@@ -60,7 +65,7 @@ router.put('/:id', (req, res) => {
 
   // Different id
   if (body.id != id) {
-    res.json({
+    res.status(400).json({
       message: 'Error: Provided id is different than param',
       data: ''
     });
@@ -70,7 +75,7 @@ router.put('/:id', (req, res) => {
   // Id doesn't exist
   let index = products.findIndex(product => product.id == id);
   if (index < 0) {
-    res.json({
+    res.status(404).json({
       message: "Error: Product doesn't exist",
       data: ''
     });
@@ -79,7 +84,7 @@ router.put('/:id', (req, res) => {
 
   // Update product
   let productUpdated = products[index] = body;
-  res.json({
+  res.status(204).json({
     message: 'Updated',
     data: productUpdated
   });
@@ -89,7 +94,7 @@ router.delete('/:id', (req, res) => {
   const { id } = req.params;
   let index = products.findIndex(product => product.id == id);
   let productDeleted = products.splice(index, 1);
-  res.json({
+  res.status(204).json({
     message: 'Deleted',
     data: productDeleted
   });
