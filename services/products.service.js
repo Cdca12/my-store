@@ -19,15 +19,19 @@ class ProductsService {
     }
   }
 
-  findAll(size) {
-    return this.products.slice(0, size);
+  async findAll(size) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(this.products.slice(0, size));
+      }, 3000);
+    })
   }
 
-  findById(id) {
+  async findById(id) {
     return this.products.find(product => product.id == id);
   }
 
-  create(product) {
+  async create(product) {
     let lastProduct = this.products[this.products.length - 1];
     let newId = lastProduct.id + 1;
     let newProduct = {
@@ -38,7 +42,7 @@ class ProductsService {
     return newProduct;
   }
 
-  update(id, product) {
+  async update(id, product) {
     let index = this.products.findIndex(product => product.id == id);
     if (index < 0) {
       throw new Error('Product not found');
@@ -47,7 +51,7 @@ class ProductsService {
     return product;
   }
 
-  delete(id) {
+  async delete(id) {
     let index = this.products.findIndex(product => product.id == id);
     if (index < 0) {
       throw new Error('Product not found');
