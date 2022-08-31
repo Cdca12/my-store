@@ -6,10 +6,14 @@ const router = express.Router();
 const service = new ProductsService();
 
 // Endpoints
-router.get('/', async (req, res) => {
-  const { size } = req.query;
-  const products = await service.findAll(size || 10);
-  res.status(200).json(products);
+router.get('/', async (req, res, next) => {
+  try {
+    const { size } = req.query;
+    const products = await service.findAll(size || 10);
+    res.status(200).json(products);
+  } catch (error) {
+    next(error);
+  }
 });
 
 // Todo lo que es específico debe ir antes de lo dinámico
