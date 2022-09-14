@@ -12,7 +12,7 @@ router.get('/', async (req, res, next) => {
   try {
     const { size } = req.query;
     const products = await service.findAll(size || 10);
-    res.status(200).json(products);
+    return res.status(200).json(products);
   } catch (error) {
     next(error);
   }
@@ -20,7 +20,7 @@ router.get('/', async (req, res, next) => {
 
 // Todo lo que es específico debe ir antes de lo dinámico
 router.get('/filter', (req, res) => {
-  res.send('Yo soy un filter');
+  return res.send('Yo soy un filter');
 });
 
 router.get('/:id',
@@ -29,7 +29,7 @@ router.get('/:id',
     try {
       const { id } = req.params;
       const product = await service.findById(id);
-      res.status(200).json(product);
+      return res.status(200).json(product);
     } catch (error) {
       next(error);
     }
@@ -41,7 +41,7 @@ router.post('/',
     const body = req.body;
     let productCreated = await service.create(body);
 
-    res.status(201).json({
+    return res.status(201).json({
       message: 'Created',
       data: productCreated
     });
@@ -56,7 +56,7 @@ router.put('/:id',
 
     // Different id
     if (body.id != id) {
-      res.status(400).json({
+      return res.status(400).json({
         message: 'Error: Provided id is different than param',
         data: ''
       });
@@ -65,7 +65,7 @@ router.put('/:id',
     // Id doesn't exist
     let product = await service.findById(id);
     if (!product) {
-      res.status(404).json({
+      return res.status(404).json({
         message: "Error: Product doesn't exist",
         data: ''
       });
@@ -75,12 +75,12 @@ router.put('/:id',
     try {
       let productUpdated = await service.update(id, body);
       // Response code 204 doesn't let return message and data
-      res.status(200).json({
+      return res.status(200).json({
         message: 'Updated',
         data: productUpdated
       });
     } catch (err) {
-      res.status(500).json({
+      return res.status(500).json({
         message: err.message
       })
     }
@@ -89,7 +89,7 @@ router.put('/:id',
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
   let productDeleted = await service.delete(id);
-  res.status(200).json({
+  return res.status(200).json({
     message: 'Deleted',
     data: productDeleted
   });

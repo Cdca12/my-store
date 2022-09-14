@@ -21,13 +21,13 @@ generateUsers();
 router.get('/', (req, res) => {
   const { size } = req.query;
   const limit = size || 10;
-  res.status(200).json(users.slice(0, limit));
+  return res.status(200).json(users.slice(0, limit));
 });
 
 router.get('/:id', (req, res) => {
   const { id } = req.params;
   let user = users.find(user => user.id == id);
-  res.status(200).json(user);
+  return res.status(200).json(user);
 });
 
 

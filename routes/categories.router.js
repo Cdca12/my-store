@@ -24,19 +24,19 @@ generateCategories();
 router.get('/', (req, res) => {
   const { size } = req.query;
   const limit = size || 10;
-  res.status(200).json(categories.slice(0, limit));
+  return res.status(200).json(categories.slice(0, limit));
 });
 
 router.get('/:id', (req, res) => {
   const { id } = req.params;
   let category = categories.find(category => category.id == id);
-  res.status(200).json(category);
+  return res.status(200).json(category);
 });
 
 router.get('/products/:productId', (req, res) => {
   const { productId } = req.params;
   let categoriesList = categories.filter(category => category.product.id == productId);
-  res.status(200).json(categoriesList);
+  return res.status(200).json(categoriesList);
 });
 
 
