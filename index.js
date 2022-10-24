@@ -8,7 +8,21 @@ const app = express();
 const port = 3000;
 
 // Cors
-app.use(cors());
+const whitelist = [
+  'http://localhost:8080',
+  'http://127.0.0.1:5500',
+  'https://myapp.com'
+]
+const options = {
+  origin: (origin, callback) => {
+    if (whitelist.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('No permitido'));
+    }
+  }
+}
+app.use(cors(options));
 
 // Routing
 routerApi(app);
